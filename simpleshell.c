@@ -34,9 +34,9 @@ int parseInput(char* input, char splitWords[], int maxWords){
     strtok(input, " \n");
     while(input != NULL && maxWords > 0){
         strcpy(splitWords, input);
-        splitwords += strlen(input) + 1;
+        splitWords += strlen(input) + 1;
         maxWords--;
-        input = strtok(NULL, " \n")
+        input = strtok(NULL, " \n");
     }
     return maxWords;
 }
