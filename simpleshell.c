@@ -11,7 +11,7 @@ int parseInput(char*, char [], int);
 
 int main(){
 
-
+    printf("HALLO");
     return 0;
 }
 
