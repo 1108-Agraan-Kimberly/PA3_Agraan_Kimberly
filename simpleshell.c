@@ -15,20 +15,18 @@ int parseInput(char*, char [], int);
 
 int main(){
  char input[256];
-    char splitWords[20][128]; // Up to 20 words, each up to 127 chars
-    char* parsedWords[20];    // Array of pointers to each word
+    char splitWords[20][128];
+    char* parsedWords[20];   
     char cwd[256];
-    const char* netid = "yourNetID"; // <-- Replace with your actual netid
+    const char* netid = "kagraan"; 
 
     while (1) {
-        // Display prompt
+
         getcwd(cwd, sizeof(cwd));
         printf("%s:%s$ ", netid, cwd);
 
-        // Get user input
         if (!fgets(input, sizeof(input), stdin)) break;
 
-        // Parse input into splitWords buffer
         int wordCount = 0;
         char* token = strtok(input, " \n");
         while (token && wordCount < 20) {
@@ -37,16 +35,14 @@ int main(){
             wordCount++;
             token = strtok(NULL, " \n");
         }
-        parsedWords[wordCount] = NULL; // Null-terminate for execvp
+        parsedWords[wordCount] = NULL;
 
-        if (wordCount == 0) continue; // Empty input
+        if (wordCount == 0) continue; 
 
-        // Handle 'exit'
         if (strcmp(parsedWords[0], "exit") == 0) {
             break;
         }
 
-        // Handle 'cd'
         if (strcmp(parsedWords[0], "cd") == 0) {
             if (wordCount > 1) {
                 changeDirectories(parsedWords[1]);
@@ -56,7 +52,6 @@ int main(){
             continue;
         }
 
-        // Check for redirection
         int redirectIdx = -1;
         char infile[128] = "";
         char outfile[128] = "";
@@ -73,7 +68,6 @@ int main(){
             }
         }
 
-        // Prepare command array for execvp
         int cmdCount = (redirectIdx == -1) ? wordCount : redirectIdx;
         char** execArgs = malloc((cmdCount + 1) * sizeof(char*));
         for (int i = 0; i < cmdCount; i++) {
@@ -81,7 +75,6 @@ int main(){
         }
         execArgs[cmdCount] = NULL;
 
-        // Execute command
         executeCommand(execArgs, infile[0] ? infile : NULL, outfile[0] ? outfile : NULL);
 
         free(execArgs);
