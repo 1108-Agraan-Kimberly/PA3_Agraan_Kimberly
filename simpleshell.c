@@ -105,7 +105,7 @@ int executeCommand(char* const* enterCommand, const char* infile, const char* ou
                 printf("error: %s\n", strerror(errno));
                 _exit(1);
             }
-            dup2(fd, stdout_fileno);
+            dup2(fd, STDOUT_FILENO);
             close(fd);
         }
         execvp(enterCommand[0], enterCommand);
