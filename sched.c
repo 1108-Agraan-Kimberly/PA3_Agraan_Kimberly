@@ -23,7 +23,10 @@ void* arraySum(void*);
 
 int main(int argc, char* argv[]){
 
-
+    if(argc != 2){
+        printf("Not enough arguments. Usage: %s <num_threads> \n", agrv[0]);
+        return -1;
+    }
 
 }
 
@@ -54,7 +57,7 @@ void* arraySum(void* arg){
         print_progress(tdata->localTid, latencyMax);
 
     }
-    
+
     return NULL;
     
 }
