@@ -28,6 +28,60 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
+     int numThreads = atoi(argv[1]);
+    if (numThreads <= 0) {
+        printf("Number of threads must be positive.\n");
+        return -1;
+    }
+
+    int* bigArray = malloc(2000000 * sizeof(int));
+    if (!bigArray) {
+        printf("Failed to allocate array.\n");
+        return -1;
+    }
+
+    long long int totalSum = 0;
+    pthread_mutex_t lock;
+    pthread_mutex_init(&lock, NULL);
+
+
+        thread_data_t* tdata = malloc(numThreads * sizeof(thread_data_t));
+    if (!tdata) {
+        printf("Failed to allocate thread data.\n");
+        free(bigArray);
+        return -1;
+    }
+
+        for (int i = 0; i < numThreads; i++) {
+        tdata[i].localTid = i;
+        tdata[i].data = bigArray;
+        tdata[i].numVals = 2000000;
+        tdata[i].lock = &lock;
+        tdata[i].totalSum = &totalSum;
+    }
+
+    pthread_t* threads = malloc(numThreads * sizeof(pthread_t));
+    if(!threads){
+        printf("Failed to allocate threads.\n");
+        free(bigArray);
+        free(tdata);
+        return -1;
+    }
+
+    for(int i = 0; i < numThreads; i++){
+        pthread_create(&threads[i], NULL, arraySum, &tdata[i]);
+    }
+     
+    for(int i = 0; i < numThreads; i++){
+        pthread_join(&threads[i], NULL);
+    }
+
+    free(bigArray);
+    free(tdata);
+    free(threads);
+    pthread_mutex_destroy(&lock);
+
+    return 0;
 }
 
 void* arraySum(void* arg){
