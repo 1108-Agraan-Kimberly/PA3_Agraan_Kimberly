@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <pthread.h>
+#include <time.h>
 #include <fcntl.h>
 
 int executeCommand(char* const*, const char*, const char*);

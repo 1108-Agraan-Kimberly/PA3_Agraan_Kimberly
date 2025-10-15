@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <pthread.h>
+#include <time.h>
 #include <fcntl.h>
 //#include "print_progress.c"
 
@@ -20,6 +22,7 @@ long long int *totalSum;
 thread_data_t;
 
 void* arraySum(void*);
+void print_progress(int localTid, size_t value);
 
 int main(int argc, char* argv[]){
 
@@ -73,7 +76,7 @@ int main(int argc, char* argv[]){
     }
      
     for(int i = 0; i < numThreads; i++){
-        pthread_join(&threads[i], NULL);
+        pthread_join(threads[i], NULL);
     }
 
     free(bigArray);
