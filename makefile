@@ -1,4 +1,4 @@
-schedule: sched.c
+sched: sched.c
 	gcc -o sched sched.c
 clean:
-	rm *o schedule
+	rm *o sched

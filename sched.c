@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "print_progress.c"
+//#include "print_progress.c"
 
 typedef struct _thread_data_t {
 int localTid;
@@ -24,7 +24,7 @@ void* arraySum(void*);
 int main(int argc, char* argv[]){
 
     if(argc != 2){
-        printf("Not enough arguments. Usage: %s <num_threads> \n", agrv[0]);
+        printf("Not enough arguments. Usage: %s <num_threads> \n", argv[0]);
         return -1;
     }
 
@@ -93,9 +93,9 @@ void* arraySum(void* arg){
         long latencyMax = 0;
 
         for(int i =0; i < tdata->numVals; i++){
-            struct timespec start end;
+            struct timespec start, end;
             clock_gettime(CLOCK_MONOTONIC, &start);
-            threadSum += tdata->data[i];
+            sum += tdata->data[i];
             clock_gettime(CLOCK_MONOTONIC, &end);
 
             long latency = (end.tv_sec - start.tv_sec) * 1000000000L + (end.tv_nsec - start.tv_nsec);
