@@ -86,6 +86,47 @@ int main(int argc, char* argv[]){
 
     return 0;
 }
+void print_progress(pid_t localTid, size_t value) {
+        pid_t tid = syscall(__NR_gettid);
+
+        TERM_GOTOXY(0,localTid+1);
+
+	char prefix[256];
+        size_t bound = 100;
+        sprintf(prefix, "%d: %ld (ns) \t[", tid, value);
+	const char suffix[] = "]";
+	const size_t prefix_length = strlen(prefix);
+	const size_t suffix_length = sizeof(suffix) - 1;
+	char *buffer = calloc(bound + prefix_length + suffix_length + 1, 1);
+	size_t i = 0;
+
+	strcpy(buffer, prefix);
+	for (; i < bound; ++i)
+	{
+	    buffer[prefix_length + i] = i < value/10000 ? '#' : ' ';
+	}
+	strcpy(&buffer[prefix_length + i], suffix);
+        
+        if (!(localTid % 7)) 
+            printf(ANSI_COLOR_WHITE "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 6)) 
+            printf(ANSI_COLOR_BLUE "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 5)) 
+            printf(ANSI_COLOR_RED "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 4)) 
+            printf(ANSI_COLOR_GREEN "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 3)) 
+            printf(ANSI_COLOR_CYAN "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 2)) 
+            printf(ANSI_COLOR_YELLOW "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else if (!(localTid % 1)) 
+            printf(ANSI_COLOR_MAGENTA "\b%c[2K\r%s\n" ANSI_COLOR_RESET, 27, buffer);  
+        else
+            printf("\b%c[2K\r%s\n", 27, buffer);
+
+	fflush(stdout);
+	free(buffer);
+}
 
 void* arraySum(void* arg){
 
