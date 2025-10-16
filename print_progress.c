@@ -64,7 +64,7 @@ void print_progress(pid_t localTid, size_t value) {
 	fflush(stdout);
 	free(buffer);
 }
-
+#ifdef PRINT_PROGRESS_TEST
 int main(int argc, char *argv[]){
     
     TERM_CLEAR();
@@ -80,5 +80,5 @@ int main(int argc, char *argv[]){
     
     return 0;
 }
-
+#endif
 
